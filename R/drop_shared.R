@@ -84,20 +84,19 @@ drop_list_shared_links <-
 
 
     if(is.null(cursor)){
-      args <- drop_compact(
-        list(
-        ))
+      res <-
+        httr::POST(shared_links_url, httr::config(token = dtoken), encode = "json")
 
     } else {
-      args <- drop_compact(
-        list(
-          cursor= cursor
-        ))
+
+      res <-
+        httr::POST(shared_links_url,body=drop_compact(
+          list(
+            cursor= cursor
+          )), httr::config(token = dtoken), encode = "json")
 
     }
 
-    res <-
-      httr::POST(shared_links_url,body=args, httr::config(token = dtoken), encode = "json")
 
     httr::warn_for_status(res)
     z <- httr::content(res)
