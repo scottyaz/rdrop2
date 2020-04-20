@@ -57,7 +57,7 @@ drop_share <- function(path = NULL,
     url = share_url,
     httr::config(token = dtoken),
     body = list(path = path, settings = settings),
-    encode = "json" 
+    encode = "json"
   )
   # stopping for status otherwise content fails
   httr::stop_for_status(req)
@@ -78,7 +78,7 @@ drop_share <- function(path = NULL,
 #' drop_list_shared_links()
 #' }
 drop_list_shared_links <-
-  function(verbose = TRUE, dtoken = get_dropbox_token()) {
+  function(verbose = TRUE, dtoken = get_dropbox_token(),cursor) {
     shared_links_url <-
       "https://api.dropboxapi.com/2/sharing/list_shared_links"
     res <-
@@ -94,3 +94,40 @@ drop_list_shared_links <-
       # Clean up the verbose and non-verbose options
     }
   }
+
+#' List shared link for specific file
+#' @template token
+#' @param verbose Print verbose output
+#'
+#' @export
+#' @references \href{https://www.dropbox.com/developers/documentation/http/documentation#get_shared_link_file}{API documentation}
+#'
+#' @examples \dontrun{
+#' drop_get_shared_link_file()
+#' }
+drop_get_shared_link_file <-
+  function(verbose = TRUE, dtoken = get_dropbox_token(),path) {
+
+    shared_links_url <-
+      "https://api.dropboxapi.com/2/sharing/list_shared_links"
+
+    args <- drop_compact(
+      list(
+        path = path
+      ))
+
+    res <-
+      httr::POST(shared_links_url, body=args, httr::config(token = dtoken), encode = "json")
+
+    httr::stop_for_status(res)
+    z <- httr::content(res)
+    if (verbose) {
+      invisible(z)
+      pretty_lists(z)
+    } else {
+      invisible(z)
+      # TODO
+      # Clean up the verbose and non-verbose options
+    }
+  }
+
