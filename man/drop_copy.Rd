@@ -4,8 +4,9 @@
 \alias{drop_copy}
 \title{Copies a file or folder to a new location.}
 \usage{
-drop_copy(from_path = NULL, to_path = NULL, allow_shared_folder = FALSE,
-  autorename = FALSE, allow_ownership_transfer = FALSE, verbose = FALSE,
+drop_copy(from_path = NULL, to_path = NULL,
+  allow_shared_folder = FALSE, autorename = FALSE,
+  allow_ownership_transfer = FALSE, verbose = FALSE,
   dtoken = get_dropbox_token())
 }
 \arguments{

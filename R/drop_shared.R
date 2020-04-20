@@ -78,12 +78,28 @@ drop_share <- function(path = NULL,
 #' drop_list_shared_links()
 #' }
 drop_list_shared_links <-
-  function(verbose = TRUE, dtoken = get_dropbox_token(),cursor) {
+  function(cursor=NULL,verbose = TRUE, dtoken = get_dropbox_token()) {
     shared_links_url <-
       "https://api.dropboxapi.com/2/sharing/list_shared_links"
+
+
+    if(is.null(cursor)){
+      args <- drop_compact(
+        list(
+        ))
+
+    } else {
+      args <- drop_compact(
+        list(
+          cursor= cursor
+        ))
+
+    }
+
     res <-
-      httr::POST(shared_links_url, httr::config(token = dtoken), encode = "json")
-    httr::stop_for_status(res)
+      httr::POST(shared_links_url,body=args, httr::config(token = dtoken), encode = "json")
+
+    httr::warn_for_status(res)
     z <- httr::content(res)
     if (verbose) {
       invisible(z)

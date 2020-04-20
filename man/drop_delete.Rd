@@ -4,7 +4,8 @@
 \alias{drop_delete}
 \title{Deletes a file or folder.}
 \usage{
-drop_delete(path = NULL, verbose = FALSE, dtoken = get_dropbox_token())
+drop_delete(path = NULL, verbose = FALSE,
+  dtoken = get_dropbox_token())
 }
 \arguments{
 \item{path}{Path in the user's Dropbox, relative to root}
