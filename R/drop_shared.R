@@ -60,7 +60,7 @@ drop_share <- function(path = NULL,
     encode = "json"
   )
   # stopping for status otherwise content fails
-  httr::stop_for_status(req)
+  httr::warn_for_status(req)
   response <- httr::content(req)
   response
 }
