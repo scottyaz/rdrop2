@@ -86,7 +86,6 @@ drop_list_shared_links <-
     if(is.null(cursor)){
       res <-
         httr::POST(shared_links_url, httr::config(token = dtoken), encode = "json")
-
     } else {
 
       res <-
