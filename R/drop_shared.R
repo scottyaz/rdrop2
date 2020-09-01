@@ -70,6 +70,8 @@ drop_share <- function(path = NULL,
 #' This function returns a list of all links that are currently being shared
 #' @template token
 #' @param verbose Print verbose output
+#' @param cursor Pass cursor value from previous call to list_shared_files
+#' @param path directory to look into for shared files
 #'
 #' @export
 #' @references \href{https://www.dropbox.com/developers/documentation/http/documentation#sharing-list_shared_links}{API documentation}
@@ -78,36 +80,42 @@ drop_share <- function(path = NULL,
 #' drop_list_shared_links()
 #' }
 drop_list_shared_links <-
-  function(cursor=NULL,verbose = TRUE, dtoken = get_dropbox_token()) {
-    shared_links_url <-
-      "https://api.dropboxapi.com/2/sharing/list_shared_links"
+    function(cursor=NULL,path=NULL,verbose = TRUE, dtoken = get_dropbox_token()) {
+
+        shared_links_url <-
+            "https://api.dropboxapi.com/2/sharing/list_shared_links"
+
+       # if(is.null(cursor)){
+
+        #    res <-
+         #       httr::POST(shared_links_url,body=drop_compact(
+            #                                    list(path=path,
+            #                                         )), httr::config(token = dtoken), encode = "json")
+
+            ## res <-
+            ##   httr::POST(shared_links_url, httr::config(token = dtoken), encode = "json")
+        #} else {
+
+            res <-
+                httr::POST(shared_links_url,body=drop_compact(
+                                                list(
+                                                    cursor= cursor, path=path
+                                                    )), httr::config(token = dtoken), encode = "json")
+
+        #}
 
 
-    if(is.null(cursor)){
-      res <-
-        httr::POST(shared_links_url, httr::config(token = dtoken), encode = "json")
-    } else {
-
-      res <-
-        httr::POST(shared_links_url,body=drop_compact(
-          list(
-            cursor= cursor
-          )), httr::config(token = dtoken), encode = "json")
-
+        httr::warn_for_status(res)
+        z <- httr::content(res)
+        if (verbose) {
+            invisible(z)
+            pretty_lists(z)
+        } else {
+            invisible(z)
+                                        # TODO
+                                        # Clean up the verbose and non-verbose options
+        }
     }
-
-
-    httr::warn_for_status(res)
-    z <- httr::content(res)
-    if (verbose) {
-      invisible(z)
-      pretty_lists(z)
-    } else {
-      invisible(z)
-      # TODO
-      # Clean up the verbose and non-verbose options
-    }
-  }
 
 #' List shared link for specific file
 #' @template token
